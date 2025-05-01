@@ -9,23 +9,28 @@ public class Exercises {
         complete the method below, so it will validate an email address
      */
     public boolean validateEmail(String email) {
-        String regex = ""; // todo
+        String regex = "^[a-zA-Z0-9](?!.*\\.\\.)[a-zA-Z0-9._-]*[a-zA-Z0-9]@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
 
         return matcher.matches();
     }
 
-    /*
-        this method should find a date in string
-        note that it should be in british or american format
-        if there's no match for a date, return null
-     */
+        /*
+            this method should find a date in string
+            note that it should be in british or american format
+            if there's no match for a date, return null
+         */
     public String findDate(String string) {
-        // todo
+        String regex = "\\b(\\d{2}/\\d{2}/\\d{4})\\b|\\b(\\d{4}[-/]\\d{2}[-/]\\d{2})\\b";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(string);
+
+        if (matcher.find()) {
+            return matcher.group();
+        }
         return null;
     }
-
     /*
         given a string, implement the method to detect all valid passwords
         then, it should return the count of them
@@ -37,9 +42,21 @@ public class Exercises {
         - has no white-space in it
      */
     public int findValidPasswords(String string) {
-        // todo
-        return -1;
+        String regex = "(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])^(?!.*\\s).{8,}$";
+        Pattern pattern = Pattern.compile(regex);
+
+        String[] words = string.split("\\s+");
+        int validPasswordCount = 0;
+
+        for (String word : words) {
+            if (pattern.matcher(word).matches()) {
+                validPasswordCount++;
+            }
+        }
+
+        return validPasswordCount;
     }
+
 
     /*
         you should return a list of *words* which are palindromic
@@ -48,9 +65,31 @@ public class Exercises {
         note: your implementation should be case-insensitive, e.g. Aba -> is palindrome
      */
     public List<String> findPalindromes(String string) {
-        List<String> list = new ArrayList<>();
-        // todo
-        return list;
+        List<String> palindromes = new ArrayList<>();
+        String regex = "\\b[a-zA-Z]{3,}\\b";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(string);
+
+        while (matcher.find()) {
+            String word = matcher.group().toLowerCase();
+            boolean isPalindrome = true;
+
+            int left = 0, right = word.length() - 1;
+            while (left < right) {
+                if (word.charAt(left) != word.charAt(right)) {
+                    isPalindrome = false;
+                    break;
+                }
+                left++;
+                right--;
+            }
+
+            if (isPalindrome) {
+                palindromes.add(matcher.group());
+            }
+        }
+
+        return palindromes;
     }
 
     public static void main(String[] args) {
